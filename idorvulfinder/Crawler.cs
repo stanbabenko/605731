@@ -37,12 +37,15 @@ namespace WebCrawler
 
                 var htmlContent = await response.Content.ReadAsStringAsync();
 
+                ExtractAndPrintCorsHeaders(response);
+                //ExtractAndPrintHeaders(response);
+
                 // Extract relevant information from the HTML content
                 // e.g., parse links, scrape data, etc.
 
                 // Example: Print the title of the page
                 var pageTitle = ExtractPageTitle(htmlContent);
-                Console.WriteLine($"Title: {pageTitle}");
+                //Console.WriteLine($"Title: {pageTitle}");
 
                 // Example: Extract and crawl all the links on the page
                 var pageLinks = ExtractPageLinks(htmlContent);
@@ -55,6 +58,26 @@ namespace WebCrawler
             {
                 Console.WriteLine($"Error crawling URL: {url}");
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void ExtractAndPrintCorsHeaders(HttpResponseMessage response)
+        {
+            foreach (var header in response.Headers)
+            {
+                if (header.Key.StartsWith("Access-Control-"))
+                {
+                    Console.WriteLine($"{header.Key}: {string.Join(",", header.Value)}");
+                }
+            }
+        }
+
+        private void ExtractAndPrintHeaders(HttpResponseMessage response)
+        {
+            Console.WriteLine("Headers:");
+            foreach (var header in response.Headers)
+            {
+                Console.WriteLine($"{header.Key}: {string.Join(",", header.Value)}");
             }
         }
 
@@ -90,7 +113,7 @@ namespace WebCrawler
         public static async Task Main(string[] args)
         {
             var controller = new WebCrawlerInstance();
-            await controller.CrawlAsync("https://example.com", 2);
+            await controller.CrawlAsync("https://example.com", 4);
         }
     }
 }

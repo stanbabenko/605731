@@ -24,7 +24,7 @@ public class CrawlerController : ControllerBase
     {
 
         var controller = new WebCrawlerInstance();
-        await controller.CrawlAsync("https://google.com", 2);
+        await controller.CrawlAsync("https://digest.myhq.in/fintech-startups-in-india/", 4);
         return "210 ok";
     }
 }
